@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Predictions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Health Disease Predictions</h1>
+        
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="file" name="file" required>
+            <button type="submit" class="btn">Upload and Calculate</button>
+        </form>
+        
+        <div id="results" class="results">
+            <div class="metric" id="accuracy">
+                Accuracy: <span id="accuracy_value">--</span>
+            </div>
+            <div class="metric" id="f1">
+                F1 Score: <span id="f1_value">--</span>
+            </div>
+            <div class="yes-no-tab" id="yes_no">
+                <span id="tab_value">--</span>
+            </div>
+        </div><br><br>
+    
+        <h1>Health Predictions</h1>
+        <form id="healthForm">
+            <label for="heart_rate">Heart Rate (bpm):</label>
+            <input type="number" id="heart_rate" name="heart_rate" required><br>
+
+            <label for="blood_pressure">Blood Pressure (mmHg):</label>
+            <input type="number" id="blood_pressure" name="blood_pressure" required>
+
+            <button type="submit">Check Health</button>
+        </form>
+
+
+        <div id="results" class="hidden">
+            <div id="heart_status" class="status"></div>
+            <div id="bp_status" class="status"></div>
+            <div id="overall_health" class="status"></div>
+        </div>
+    </div>
+
+
+    <script>
+        document.getElementById("uploadForm").onsubmit = async function (e) {
+            e.preventDefault();
+            
+            let file = document.getElementById("file").files[0];
+            let formData = new FormData();
+            formData.append("file", file);
+            
+            let response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+            
+            let result = await response.json();
+            
+            if (response.status === 200) {
+                document.getElementById("accuracy_value").innerText = result.accuracy.toFixed(2) + "%";
+                document.getElementById("f1_value").innerText = result.f1.toFixed(2) + "%";
+
+                // Update the Yes/No tab
+                if (result.accuracy > 80) {
+                    document.getElementById("tab_value").innerText = "Yes";
+                    document.getElementById("yes_no").style.backgroundColor = "green";
+                } else {
+                    document.getElementById("tab_value").innerText = "No";
+                    document.getElementById("yes_no").style.backgroundColor = "red";
+                }
+            } else {
+                alert(result.error || 'Error in file upload or processing.');
+            }
+        };
+    </script>
+
+    
+    <script>
+        document.getElementById('healthForm').onsubmit = async function (e) {
+            e.preventDefault();
+
+            const heartRate = document.getElementById('heart_rate').value;
+            const bloodPressure = document.getElementById('blood_pressure').value;
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `heart_rate=${heartRate}&blood_pressure=${bloodPressure}`
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                document.getElementById('results').classList.remove('hidden');
+                document.getElementById('heart_status').innerText = `Heart Rate: ${result.heart_status}`;
+                document.getElementById('bp_status').innerText = `Blood Pressure: ${result.bp_status}`;
+                document.getElementById('overall_health').innerText = `Overall Health: ${result.overall_health}`;
+
+                // Set colors based on results
+                document.getElementById('heart_status').style.color = result.heart_status === "Normal" ? "green" : "red";
+                document.getElementById('bp_status').style.color = result.bp_status === "Normal" ? "green" : "red";
+                document.getElementById('overall_health').style.color = result.overall_health === "Healthy" ? "green" : "orange";
+            } else {
+                alert(result.error);
+            }
+        };
+    </script>
+
+</body>
+</html>

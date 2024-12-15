@@ -1,0 +1,117 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #6dd5ed, #2193b0);  /* Gradient background */
+    color: #333;
+    text-align: center;
+    padding: 50px;
+}
+
+.container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Added shadow for depth */
+    width: 50%;
+    margin: auto;
+    transition: transform 0.3s;
+}
+
+.container:hover {
+    transform: scale(1.02); /* Slight zoom on hover */
+}
+
+h1 {
+    color: #2c3e50;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+form {
+    margin-bottom: 30px;
+}
+
+input[type="file"] {
+    padding: 10px;
+    margin-right: 15px;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    background: #f3f4f7;
+    color: #2c3e50;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+input[type="file"]:hover {
+    background-color: #e3e6ea;
+}
+
+button {
+    padding: 12px 18px;
+    background: linear-gradient(to right, #00c6ff, #0072ff); /* Blue gradient button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(to right, #0072ff, #00c6ff); /* Reverse gradient on hover */
+}
+
+.results {
+    margin-top: 40px;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.metric {
+    background: linear-gradient(to right, #ff7e5f, #feb47b); /* Orange gradient */
+    padding: 15px 25px;
+    border-radius: 10px;
+    width: 250px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.metric:hover {
+    transform: translateY(-5px);
+}
+
+#yes_no {
+    padding: 20px;
+    border-radius: 10px;
+    width: 120px;
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#yes_no span {
+    display: inline-block;
+    padding: 15px 30px;
+    color: white;
+    border-radius: 8px;
+}
+
+#yes_no.green {
+    background: linear-gradient(to right, #28a745, #77dd77); /* Green gradient */
+}
+
+#yes_no.red {
+    background: linear-gradient(to right, #e52d27, #b31217); /* Red gradient */
+}
+
+
